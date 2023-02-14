@@ -2,7 +2,8 @@ import express from "express";
 import dotenv from "dotenv";
 import path from "path";
 import connectDb from "./helpers/Databse/connectDb.js";
-import router from "./routers/router.js";
+import pageRouter from "./routers/pageRoute.js";
+import photoRouter from "./routers/photoRoute.js";
 const app = express();
 dotenv.config();
 connectDb();
@@ -21,7 +22,8 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // routes
-app.use(router)
+app.use('/', pageRouter)
+app.use('/photos', photoRouter)
 
 app.listen(process.env.PORT || 5000 , () => {
   console.log(`Server running on port ${process.env.PORT || 5000} 🚀`);
