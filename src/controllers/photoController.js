@@ -2,8 +2,8 @@ import Photo from "../Models/Photo.js";
 import asyncHandler from "express-async-handler";
 
 const getAllPhotos = asyncHandler(async (req, res) => {
-    const photos = await Photo.find({});
-    res.json(photos);
+    const photos = await Photo.find({}).sort({ createdAt: -1 });
+    res.render('photos', { photos });
 });
 
 const createPhoto = asyncHandler(async (req, res) => {

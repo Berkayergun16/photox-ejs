@@ -10,4 +10,6 @@ const getAboutPage = asyncHandler(async (req, res) => {
     res.render('about');
     });
 
+
+
 export { getIndexPage ,getAboutPage};
