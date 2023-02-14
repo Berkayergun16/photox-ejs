@@ -1,10 +1,10 @@
 import express from "express";
 import dotenv from "dotenv";
 import path from "path";
-
+import connectDb from "./helpers/Databse/connectDb.js";
 const app = express();
-
 dotenv.config();
+connectDb();
 
 const __dirname = path.resolve() + '/src';
 
@@ -29,5 +29,5 @@ app.get('/about', (req, res) => {
 
 
 app.listen(process.env.PORT || 5000 , () => {
-  console.log(`Server running on port ${process.env.PORT || 5000}`);
+  console.log(`Server running on port ${process.env.PORT || 5000} 🚀`);
 });
