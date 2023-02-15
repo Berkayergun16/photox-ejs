@@ -12,5 +12,8 @@ const getRegisterPage = asyncHandler(async (req, res) => {
   res.render("register");
 });
 
+const getLoginPage = asyncHandler(async (req, res) => {
+  res.render("login");
+});
 
-export { getIndexPage, getAboutPage, getRegisterPage };
+export { getIndexPage, getAboutPage, getRegisterPage,getLoginPage };
