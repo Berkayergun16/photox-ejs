@@ -4,6 +4,7 @@ import path from "path";
 import connectDb from "./helpers/Databse/connectDb.js";
 import pageRouter from "./routers/pageRoute.js";
 import photoRouter from "./routers/photoRoute.js";
+import userRouter from "./routers/userRoute.js";
 const app = express();
 dotenv.config();
 connectDb();
@@ -24,6 +25,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // routes
 app.use('/', pageRouter)
 app.use('/photos', photoRouter)
+app.use('/users', userRouter)
 app.use((req, res) => {
   res.status(404).render('404');
 });
