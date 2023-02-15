@@ -24,4 +24,13 @@ const createPhoto = asyncHandler(async (req, res) => {
   }
 });
 
-export { createPhoto ,getAllPhotos};
+const getPhotoDetail = asyncHandler(async (req, res) => {
+  const photo = await Photo.findById(req.params.id);
+  if(!photo) {
+    res.status(404);
+    throw new Error('Photo not found');
+  }
+  res.render('photo', { photo });
+});
+
+export { createPhoto ,getAllPhotos, getPhotoDetail};
