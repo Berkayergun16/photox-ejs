@@ -1,7 +1,7 @@
 import User from "../Models/User.js";
 import asyncHandler from "express-async-handler";
 import bcrypt from "bcryptjs";
-
+import jwt from "jsonwebtoken";
 const addUser = asyncHandler(async (req, res) => {
   const { username, email, password } = req.body;
   try {
@@ -21,13 +21,19 @@ const loginUser = asyncHandler(async (req, res) => {
   const user = await User.findOne({ username });
   if (user && (await bcrypt.compare(password, user.password))) {
     res.status(200).json({
-      user,
+      user, 
+      token: createToken(user._id),
     });
   }
-
   res.status(401).json({
     message: "Invalid username or password",
   });
 });
+
+const createToken = (userId) => {
+  return jwt.sign({ userId }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN,
+  });
+};
 
 export { addUser, loginUser };
