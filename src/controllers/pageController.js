@@ -1,6 +1,8 @@
 import asyncHandler from "express-async-handler";
 import User from "../Models/User.js";
 const getIndexPage = asyncHandler(async (req, res) => {
+  console.log("req.user", req.user)
+  console.log("req.cookies", req.cookies)
   res.render("index");
 });
 
