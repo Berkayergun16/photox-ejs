@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import path from "path";
+import cookieParser from "cookie-parser";
 import connectDb from "./helpers/Databse/connectDb.js";
 import pageRouter from "./routers/pageRoute.js";
 import photoRouter from "./routers/photoRoute.js";
@@ -21,7 +22,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 // static files
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(cookieParser());
 // routes
 app.use('/', pageRouter)
 app.use('/photos', photoRouter)

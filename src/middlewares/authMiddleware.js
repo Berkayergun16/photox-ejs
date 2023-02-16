@@ -1,14 +1,16 @@
 import jwt from "jsonwebtoken";
 import User from "../Models/User.js";
 import asyncHandler from "express-async-handler";
+
 const authenticateToken = asyncHandler(async (req, res, next) => {
-    const authHeader = req.headers["authorization"];
-    const token = authHeader && authHeader.split(" ")[1];
+    const token = req.cookies.jwt;
     if (!token) {
-        return res.sendStatus(401);
+        return res.redirect('/login');
     }
     jwt.verify(token, process.env.JWT_SECRET, async(err, user) => {
-        if (err) return res.sendStatus(403);
+        if (err) {
+            return res.redirect('/login');
+        }
         req.user = await User.findById(user.userId);
         next();
     });

@@ -19,15 +19,17 @@ const addUser = asyncHandler(async (req, res) => {
 const loginUser = asyncHandler(async (req, res) => {
   const { username, password } = req.body;
   const user = await User.findOne({ username });
-  if (user && (await bcrypt.compare(password, user.password))) {
-    res.status(200).json({
-      user, 
-      token: createToken(user._id),
-    });
-  }
-  res.status(401).json({
-    message: "Invalid username or password",
+  const token = createToken(user._id);
+  
+  res.cookie("jwt", token, {
+    httpOnly: true,
+    maxAge:  2 * 60 * 60 * 1000,
   });
+
+  if (user && (await bcrypt.compare(password, user.password))) {
+    res.redirect("/users/dashboard");
+  }
+  res.redirect("/login");
 });
 
 const createToken = (userId) => {
@@ -36,4 +38,9 @@ const createToken = (userId) => {
   });
 };
 
-export { addUser, loginUser };
+
+const getDashboardPage = asyncHandler(async (req, res) => {
+  res.render("dashboard");
+});
+
+export { addUser, loginUser ,getDashboardPage};
