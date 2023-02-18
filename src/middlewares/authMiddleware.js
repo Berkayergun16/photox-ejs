@@ -2,6 +2,26 @@ import jwt from "jsonwebtoken";
 import User from "../Models/User.js";
 import asyncHandler from "express-async-handler";
 
+const checkUser = asyncHandler(async (req,res,next) => {
+    const token = req.cookies.jwt
+    if (token) {
+        jwt.verify(token, process.env.JWT_SECRET, async(err, decodedToken) => {
+            if (err) {
+             res.locals.user = null;
+                next();
+            } else {
+                let user = await User.findById(decodedToken.userId);
+                res.locals.user = user;
+                next();
+            }
+        })
+    }
+    else {
+        res.locals.user = null;
+        next();
+    }
+})
+
 const authenticateToken = asyncHandler(async (req, res, next) => {
     const token = req.cookies.jwt;
     if (!token) {
@@ -16,4 +36,4 @@ const authenticateToken = asyncHandler(async (req, res, next) => {
     });
 });
 
-export default authenticateToken;
+export { checkUser, authenticateToken };

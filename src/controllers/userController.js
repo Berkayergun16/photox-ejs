@@ -43,4 +43,11 @@ const getDashboardPage = asyncHandler(async (req, res) => {
   res.render("dashboard");
 });
 
-export { addUser, loginUser ,getDashboardPage};
+const logoutUser = asyncHandler(async (req, res) => {
+  res.cookie("jwt", "", { maxAge: 1 });
+  res.locals.user = null;
+  res.redirect("/");
+});
+
+
+export { addUser, loginUser ,getDashboardPage,logoutUser};
