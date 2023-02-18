@@ -6,6 +6,7 @@ import connectDb from "./helpers/Databse/connectDb.js";
 import pageRouter from "./routers/pageRoute.js";
 import photoRouter from "./routers/photoRoute.js";
 import userRouter from "./routers/userRoute.js";
+import { checkUser, authenticateToken } from "./middlewares/authMiddleware.js";
 const app = express();
 dotenv.config();
 connectDb();
@@ -24,6 +25,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cookieParser());
 // routes
+app.get('*', checkUser);
 app.use('/', pageRouter)
 app.use('/photos', photoRouter)
 app.use('/users', userRouter)
