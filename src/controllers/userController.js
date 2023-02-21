@@ -5,25 +5,43 @@ import jwt from "jsonwebtoken";
 const addUser = asyncHandler(async (req, res) => {
   const { username, email, password } = req.body;
   try {
-    await User.create({
+    const user = await User.create({
       username,
       email,
       password,
     });
-    res.render("register");
+    res.status(201).json({
+      status: "success",
+      user
+    });
   } catch (error) {
-    res.render("register");
+    let errors = {};
+
+    if (error.code === 11000) {
+      errors.email = "Email already exists";  
+    }
+
+    if (error.name === "ValidationError") {
+      Object.keys(error.errors).forEach((key) => {
+        errors[key] = error.errors[key].message;
+      });
+    }
+
+
+  res.status(400).json(errors);
+ 
   }
+
 });
 
 const loginUser = asyncHandler(async (req, res) => {
   const { username, password } = req.body;
   const user = await User.findOne({ username });
   const token = createToken(user._id);
-  
+
   res.cookie("jwt", token, {
     httpOnly: true,
-    maxAge:  2 * 60 * 60 * 1000,
+    maxAge: 2 * 60 * 60 * 1000,
   });
 
   if (user && (await bcrypt.compare(password, user.password))) {
@@ -38,7 +56,6 @@ const createToken = (userId) => {
   });
 };
 
-
 const getDashboardPage = asyncHandler(async (req, res) => {
   res.render("dashboard");
 });
@@ -49,5 +66,4 @@ const logoutUser = asyncHandler(async (req, res) => {
   res.redirect("/");
 });
 
-
-export { addUser, loginUser ,getDashboardPage,logoutUser};
+export { addUser, loginUser, getDashboardPage, logoutUser };
