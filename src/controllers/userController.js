@@ -2,6 +2,7 @@ import User from "../Models/User.js";
 import asyncHandler from "express-async-handler";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import Photo from './../Models/Photo.js';
 const addUser = asyncHandler(async (req, res) => {
   const { username, email, password } = req.body;
   try {
@@ -57,7 +58,11 @@ const createToken = (userId) => {
 };
 
 const getDashboardPage = asyncHandler(async (req, res) => {
-  res.render("dashboard");
+  const photos = await Photo.find({ user: res.locals.user._id }).sort({
+    createdAt: -1,
+  });
+
+  res.render("dashboard", { photos });
 });
 
 const logoutUser = asyncHandler(async (req, res) => {
