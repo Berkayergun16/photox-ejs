@@ -2,6 +2,8 @@ import express from "express";
 import dotenv from "dotenv";
 import path from "path";
 import cookieParser from "cookie-parser";
+import fileUpload from "express-fileupload"
+import {v2 as cloudinary} from "cloudinary"
 import connectDb from "./helpers/Databse/connectDb.js";
 import pageRouter from "./routers/pageRoute.js";
 import photoRouter from "./routers/photoRoute.js";
@@ -9,10 +11,19 @@ import userRouter from "./routers/userRoute.js";
 import { checkUser, authenticateToken } from "./middlewares/authMiddleware.js";
 const app = express();
 dotenv.config();
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET
+})
 connectDb();
 
 const __dirname = path.resolve() + '/src';
 
+
+app.use(fileUpload({
+  useTempFiles: true
+}))
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

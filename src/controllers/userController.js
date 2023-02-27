@@ -71,4 +71,18 @@ const logoutUser = asyncHandler(async (req, res) => {
   res.redirect("/");
 });
 
-export { addUser, loginUser, getDashboardPage, logoutUser };
+const getAllUsers = asyncHandler(async (req, res) => {
+  const users = await User.find({
+    _id: { $ne: res.locals.user._id },
+  }).sort({ createdAt: -1 });
+  res.render("users", { users });
+});
+
+const getUserDetails = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id).populate("photos");
+    console.log(user)
+
+  res.render("user" , {user});
+});
+
+export { addUser, loginUser, getDashboardPage, logoutUser,getAllUsers ,getUserDetails};
