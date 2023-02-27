@@ -11,7 +11,7 @@
                 
                 <h2><%=photo.name%></h2>
                 <p> <%=photo.description%></p>
-                <a class="read_more" href="about.html">Artist : <%= photo.user.username %></a>
+                <a class="read_more" href="/users/detail/<%=photo.user.id %>">Artist : <%= photo.user.username %></a>
               </div>
             </div>
             <div class="col-md-6">

@@ -23,6 +23,12 @@ const UserSchema = new mongoose.Schema({
         required: true,
         default: false,
     },
+    photos: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Photo",
+        },
+    ],
 },
 {
     timestamps: true,

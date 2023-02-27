@@ -2,10 +2,18 @@ import Photo from "../Models/Photo.js";
 import asyncHandler from "express-async-handler";
 import {v2 as cloudinary} from "cloudinary"
 import fs from "fs"
+import User from './../Models/User.js';
 
 
 const getAllPhotos = asyncHandler(async (req, res) => {
-    const photos = await Photo.find({}).sort({ createdAt: -1 });
+    const photos = res.locals.user ? await Photo.find({
+      user: {
+        $ne: res.locals.user._id,
+      }
+    }).sort({ createdAt: -1 }) : await Photo.find({}).sort({ createdAt: -1 });
+
+   
+
     res.render('photos', { photos });
 });
 
@@ -24,8 +32,14 @@ const createPhoto = asyncHandler(async (req, res) => {
     user: res.locals.user._id,
     url: result.secure_url,
   });
+  
   if (photo) {
     fs.unlinkSync(req.files.image.tempFilePath);
+
+    User.findByIdAndUpdate(res.locals.user._id, {
+      $push: { photos: photo._id },
+    }).exec();
+  
     res.status(201).redirect('/users/dashboard');
   } else {
     res.status(400);
