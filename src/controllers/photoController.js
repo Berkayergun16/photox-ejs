@@ -1,5 +1,8 @@
 import Photo from "../Models/Photo.js";
 import asyncHandler from "express-async-handler";
+import {v2 as cloudinary} from "cloudinary"
+import fs from "fs"
+
 
 const getAllPhotos = asyncHandler(async (req, res) => {
     const photos = await Photo.find({}).sort({ createdAt: -1 });
@@ -7,13 +10,22 @@ const getAllPhotos = asyncHandler(async (req, res) => {
 });
 
 const createPhoto = asyncHandler(async (req, res) => {
+
+  const result = await cloudinary.uploader.upload(req.files.image.tempFilePath, {
+    use_filename: true,
+    folder: 'lenslight'
+  })
+
   const { name, description } = req.body;
- const photo = await Photo.create({
+  
+  const photo = await Photo.create({
     name,
     description,
     user: res.locals.user._id,
+    url: result.secure_url,
   });
   if (photo) {
+    fs.unlinkSync(req.files.image.tempFilePath);
     res.status(201).redirect('/users/dashboard');
   } else {
     res.status(400);
@@ -22,7 +34,8 @@ const createPhoto = asyncHandler(async (req, res) => {
 });
 
 const getPhotoDetail = asyncHandler(async (req, res) => {
-  const photo = await Photo.findById(req.params.id);
+  const photo = await Photo.findById(req.params.id).populate('user');
+
   if(!photo) {
     res.status(404);
     throw new Error('Photo not found');
