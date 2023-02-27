@@ -25,7 +25,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cookieParser());
 // routes
-app.get('*', checkUser);
+app.use('*', checkUser);
 app.use('/', pageRouter)
 app.use('/photos', photoRouter)
 app.use('/users', userRouter)

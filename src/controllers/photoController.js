@@ -8,16 +8,13 @@ const getAllPhotos = asyncHandler(async (req, res) => {
 
 const createPhoto = asyncHandler(async (req, res) => {
   const { name, description } = req.body;
-  const photo = await Photo.create({
+ const photo = await Photo.create({
     name,
     description,
+    user: res.locals.user._id,
   });
   if (photo) {
-    res.status(201).json({
-      _id: photo._id,
-      name: photo.name,
-      description: photo.description,
-    });
+    res.status(201).redirect('/users/dashboard');
   } else {
     res.status(400);
     throw new Error("Invalid photo data");
