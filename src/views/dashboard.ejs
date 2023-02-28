@@ -18,7 +18,7 @@
                 <div class="row">
                   <div class="col-md-12">
                     <div class="satteb text_align_center">
-                      <p>fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that itfact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that itfact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that itfact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it</p>
+                      <p>fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that  that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that  that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that  that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it</p>
                       <h3>The point of using </h3>
                       <i><img src="/images/custo.jpg" alt="#"/></i>
                     </div>
@@ -49,13 +49,13 @@
                  </div>
                  <div class="tz-gallery">
                           <div class="row">
-                            <% if (photos.length === 0) { %>
+                            <% if (user.photos.length === 0) { %>
                                 <div class="col-md-12 text_align_center">
                                     <h1 style="color: #D43A8E;">No Photos Found</h1>
                                 </div>
                               <% } else { %>
                                 
-                             <% photos.forEach(photo => { %>
+                             <% user.photos.forEach(photo => { %>
                                 <div class="col-lg-4 col-md-6 ma_bottom30">
                                    <div class="lightbox">
                                       <img src="<%= photo.url %>" alt="Bridge">
