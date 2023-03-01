@@ -2,7 +2,7 @@ import User from "../Models/User.js";
 import asyncHandler from "express-async-handler";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import Photo from './../Models/Photo.js';
+import Photo from "./../Models/Photo.js";
 const addUser = asyncHandler(async (req, res) => {
   const { username, email, password } = req.body;
   try {
@@ -13,13 +13,13 @@ const addUser = asyncHandler(async (req, res) => {
     });
     res.status(201).json({
       status: "success",
-      user
+      user,
     });
   } catch (error) {
     let errors = {};
 
     if (error.code === 11000) {
-      errors.email = "Email already exists";  
+      errors.email = "Email already exists";
     }
 
     if (error.name === "ValidationError") {
@@ -28,11 +28,8 @@ const addUser = asyncHandler(async (req, res) => {
       });
     }
 
-
-  res.status(400).json(errors);
- 
+    res.status(400).json(errors);
   }
-
 });
 
 const loginUser = asyncHandler(async (req, res) => {
@@ -58,11 +55,13 @@ const createToken = (userId) => {
 };
 
 const getDashboardPage = asyncHandler(async (req, res) => {
-  const photos = await Photo.find({ user: res.locals.user._id }).sort({
-    createdAt: -1,
-  });
+  const { id } = res.locals.user;
+  const user = await User.findById(id)
+    .populate(["photos", "followers", "following"])
+    .sort({ createdAt: -1 });
+  
 
-  res.render("dashboard", { photos });
+  return res.render("dashboard", { user });
 });
 
 const logoutUser = asyncHandler(async (req, res) => {
@@ -80,9 +79,83 @@ const getAllUsers = asyncHandler(async (req, res) => {
 
 const getUserDetails = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id).populate("photos");
-    console.log(user)
 
-  res.render("user" , {user});
+  const isFollowing = user.followers.includes(res.locals.user._id);
+
+  res.render("user", { user , isFollowing});
 });
 
-export { addUser, loginUser, getDashboardPage, logoutUser,getAllUsers ,getUserDetails};
+const followUser = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const userId = res.locals.user._id;
+
+
+  let user = await User.findByIdAndUpdate(
+    {
+      _id: id,
+    },
+    {
+      $push: { followers: userId },
+    },
+    {
+      new: true,
+    }
+  );
+
+  user = await User.findByIdAndUpdate(
+    {
+      _id: userId,
+    },
+    {
+      $push: { following: id },
+    },
+    {
+      new: true,
+    }
+  );
+
+  res.redirect(`/users/detail/${id}`);
+});
+
+const unfollowUser = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const userId = res.locals.user._id;
+
+  let user = await User.findByIdAndUpdate(
+    {
+      _id: id,
+    },
+    {
+      $pull: { followers: userId },
+    },
+    {
+      new: true,
+    }
+  );
+
+  user = await User.findByIdAndUpdate(
+    {
+      _id: userId,
+    },
+    {
+      $pull: { following: id },
+    },
+    {
+      new: true,
+    }
+  );
+
+  res.redirect(`/users/detail/${id}`);
+
+});
+
+export {
+  addUser,
+  loginUser,
+  getDashboardPage,
+  logoutUser,
+  getAllUsers,
+  getUserDetails,
+  followUser,
+  unfollowUser
+};

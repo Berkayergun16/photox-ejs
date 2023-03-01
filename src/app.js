@@ -4,6 +4,7 @@ import path from "path";
 import cookieParser from "cookie-parser";
 import fileUpload from "express-fileupload"
 import {v2 as cloudinary} from "cloudinary"
+import methodOverride from "method-override";
 import connectDb from "./helpers/Databse/connectDb.js";
 import pageRouter from "./routers/pageRoute.js";
 import photoRouter from "./routers/photoRoute.js";
@@ -20,10 +21,6 @@ connectDb();
 
 const __dirname = path.resolve() + '/src';
 
-
-app.use(fileUpload({
-  useTempFiles: true
-}))
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -35,6 +32,15 @@ app.set('views', path.join(__dirname, 'views'));
 // static files
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cookieParser());
+app.use(fileUpload({
+  useTempFiles: true
+}))
+app.use(methodOverride('_method',{
+  methods: ['POST', 'GET']
+}));
+
+
+
 // routes
 app.use('*', checkUser);
 app.use('/', pageRouter)
