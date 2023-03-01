@@ -59,10 +59,9 @@ const getDashboardPage = asyncHandler(async (req, res) => {
   const user = await User.findById(id)
     .populate(["photos", "followers", "following"])
     .sort({ createdAt: -1 });
-
   
 
-  res.render("dashboard", { user });
+  return res.render("dashboard", { user });
 });
 
 const logoutUser = asyncHandler(async (req, res) => {
@@ -82,7 +81,6 @@ const getUserDetails = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id).populate("photos");
 
   const isFollowing = user.followers.includes(res.locals.user._id);
-  console.log(isFollowing)
 
   res.render("user", { user , isFollowing});
 });

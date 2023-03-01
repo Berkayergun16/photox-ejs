@@ -42,8 +42,7 @@
                  <div class="row">
                     <div class="col-md-12">
                        <div class="titlepage text_align_center">
-                          <span>03</span>
-                          <h2>Our gallery</h2>
+                          <h2>My Photos</h2>
                        </div>
                     </div>
                  </div>
@@ -79,6 +78,86 @@
               </div>
            </div>
 
+           <!-- Followers  -->
+           <div class="team">
+            <div class="container_with">
+               <div class="row">
+                  <div class="col-md-12">
+                     <div class="titlepage text_align_center">
+                        <h2>Followers </h2>
+                     </div>
+                  </div>
+                  <% if (user.followers.length === 0) { %>
+                      <div class="col-md-12 text_align_center">
+                          <h1 style="color: #D43A8E;">No Followers Found</h1>
+                      </div>
+                    <% } %>
+                  <% user.followers.forEach((user)=> { %>
+                     <a href="/users/detail/<%=user.id%>">
+                      <div class="col-md-4">
+                     <div class="team_box text_align_center">
+                        <div class="team_img">
+                          <figure><img src="/images/team1.jpg" alt="#"/></figure>
+                        </div>
+                        <div class="craig">
+                          <h3><%= user.username %></h3>
+                          <span>PHOTOGRAPHER</span>
+                          <ul class="social_icon ">
+                             <li><a href="Javascript:void(0)"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+                             <li><a href="Javascript:void(0)"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+                             <li><a href="Javascript:void(0)"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
+                          </ul>
+                        </div>
+                     </div>
+                  </div>
+               </a>
+                  <% }) %>
+               
+               </div>
+            </div>
+         </div>
+<!-- end Followers  -->
+
+<!-- Following  -->
+           <div class="team">
+            <div class="container_with">
+               <div class="row">
+                  <div class="col-md-12">
+                     <div class="titlepage text_align_center">
+                        <h2>Following</h2>
+                     </div>
+                  </div>
+   
+                  <% if (user.following.length === 0) { %>
+                    <div class="col-md-12 text_align_center">
+                        <h1 style="color: #D43A8E;">No Followers Found</h1>
+                    </div>
+                  <% } %>
+                  <% user.following.forEach((user)=> { %>
+                     <a href="/users/detail/<%=user.id%>">
+                      <div class="col-md-4">
+                     <div class="team_box text_align_center">
+                        <div class="team_img">
+                          <figure><img src="/images/team1.jpg" alt="#"/></figure>
+                        </div>
+                        <div class="craig">
+                          <h3><%= user.username %></h3>
+                          <span>PHOTOGRAPHER</span>
+                          <ul class="social_icon ">
+                             <li><a href="Javascript:void(0)"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+                             <li><a href="Javascript:void(0)"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+                             <li><a href="Javascript:void(0)"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
+                          </ul>
+                        </div>
+                     </div>
+                  </div>
+               </a>
+                  <% }) %>
+               
+               </div>
+            </div>
+         </div>
+<!-- end Following  -->
 
 <!-- Modal  -->
             <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
