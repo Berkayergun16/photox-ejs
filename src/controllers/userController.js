@@ -56,12 +56,11 @@ const createToken = (userId) => {
 
 const getDashboardPage = asyncHandler(async (req, res) => {
   const { id } = res.locals.user;
-  console.log(id);
   const user = await User.findById(id)
     .populate(["photos", "followers", "following"])
     .sort({ createdAt: -1 });
 
-  console.log(user);
+  
 
   res.render("dashboard", { user });
 });
@@ -82,12 +81,16 @@ const getAllUsers = asyncHandler(async (req, res) => {
 const getUserDetails = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id).populate("photos");
 
-  res.render("user", { user });
+  const isFollowing = user.followers.includes(res.locals.user._id);
+  console.log(isFollowing)
+
+  res.render("user", { user , isFollowing});
 });
 
 const followUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { userId } = res.locals.user;
+  const userId = res.locals.user._id;
+
 
   let user = await User.findByIdAndUpdate(
     {
@@ -118,7 +121,7 @@ const followUser = asyncHandler(async (req, res) => {
 
 const unfollowUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { userId } = res.locals.user;
+  const userId = res.locals.user._id;
 
   let user = await User.findByIdAndUpdate(
     {
@@ -145,6 +148,7 @@ const unfollowUser = asyncHandler(async (req, res) => {
   );
 
   res.redirect(`/users/detail/${id}`);
+
 });
 
 export {
