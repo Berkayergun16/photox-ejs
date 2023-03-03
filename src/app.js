@@ -1,3 +1,4 @@
+//Modules
 import express from "express";
 import dotenv from "dotenv";
 import path from "path";
@@ -5,21 +6,31 @@ import cookieParser from "cookie-parser";
 import fileUpload from "express-fileupload"
 import {v2 as cloudinary} from "cloudinary"
 import methodOverride from "method-override";
-import connectDb from "./helpers/Databse/connectDb.js";
+
+// routes
 import pageRouter from "./routers/pageRoute.js";
 import photoRouter from "./routers/photoRoute.js";
 import userRouter from "./routers/userRoute.js";
+
+// Middlewares
 import { checkUser, authenticateToken } from "./middlewares/authMiddleware.js";
+
+// Helpers
+import connectDb from "./helpers/Databse/connectDb.js";
+
+
 const app = express();
+// config
 dotenv.config();
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.CLOUD_API_KEY,
   api_secret: process.env.CLOUD_API_SECRET
 })
-connectDb();
-
 const __dirname = path.resolve() + '/src';
+
+// database connection
+connectDb();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

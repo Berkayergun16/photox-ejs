@@ -1,8 +1,11 @@
-import User from "../Models/User.js";
+// Modules
 import asyncHandler from "express-async-handler";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import Photo from "./../Models/Photo.js";
+
+// Models
+import User from "../Models/User.js";
+
 const addUser = asyncHandler(async (req, res) => {
   const { username, email, password } = req.body;
   try {
@@ -43,9 +46,9 @@ const loginUser = asyncHandler(async (req, res) => {
   });
 
   if (user && (await bcrypt.compare(password, user.password))) {
-    res.redirect("/users/dashboard");
+    return res.redirect("/users/dashboard");
   }
-  res.redirect("/login");
+  return res.redirect("/login");
 });
 
 const createToken = (userId) => {
@@ -67,7 +70,7 @@ const getDashboardPage = asyncHandler(async (req, res) => {
 const logoutUser = asyncHandler(async (req, res) => {
   res.cookie("jwt", "", { maxAge: 1 });
   res.locals.user = null;
-  res.redirect("/");
+  return res.redirect("/");
 });
 
 const getAllUsers = asyncHandler(async (req, res) => {
@@ -114,7 +117,7 @@ const followUser = asyncHandler(async (req, res) => {
     }
   );
 
-  res.redirect(`/users/detail/${id}`);
+  return res.redirect(`/users/detail/${id}`);
 });
 
 const unfollowUser = asyncHandler(async (req, res) => {
@@ -145,7 +148,7 @@ const unfollowUser = asyncHandler(async (req, res) => {
     }
   );
 
-  res.redirect(`/users/detail/${id}`);
+  return res.redirect(`/users/detail/${id}`);
 
 });
 
