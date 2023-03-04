@@ -62,7 +62,36 @@ const getPhotoDetail = asyncHandler(async (req, res) => {
 });
 
 const updatePhoto = asyncHandler(async (req, res) => {
-  console.log("update");
+  const { id } = req.params;
+  const { name, description } = req.body;
+  const { image } = req.files;
+
+  const photo = await Photo.findById(id);
+
+  if (photo) {
+    photo.name = name ? name : photo.name;
+    photo.description = description ? description : photo.description ;
+    photo.url = image ? image.tempFilePath : photo.url;
+
+    if (image) {
+      await cloudinary.uploader.destroy(photo.image_id);
+      const result = await cloudinary.uploader.upload(image.tempFilePath, {
+        use_filename: true,
+        folder: 'lenslight'
+      })
+      photo.url = result.secure_url;
+      photo.image_id = result.public_id;
+
+      fs.unlinkSync(image.tempFilePath);
+    }
+
+     const updatedPhoto =  await photo.save();
+
+    res.status(200).redirect(`/photos/${updatedPhoto._id}`);
+  }
+
+  res.status(404);
+
 
 });
 
