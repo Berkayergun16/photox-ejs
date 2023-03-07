@@ -1,11 +1,18 @@
 // Modules
 import asyncHandler from "express-async-handler";
-import htmlMailTemplate from "../helpers/mail/htmlMailTemplate.js";
-import nodemailer from "nodemailer";
+
+// Models
+import Photo from './../Models/Photo.js';
+import User from './../Models/User.js';
+
+// Helpers
 import sendMail from "../helpers/mail/sendMail.js";
 
 const getIndexPage = asyncHandler(async (req, res) => {
-  res.render("index");
+  const photos = await Photo.find({}).sort({ createdAt: -1 }).limit(6);
+  const userCount = await User.countDocuments();
+
+  res.render("index", { photos ,userCount});
 });
 
 const getAboutPage = asyncHandler(async (req, res) => {

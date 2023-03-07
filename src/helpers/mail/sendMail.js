@@ -1,4 +1,7 @@
+// Modules
 import nodemailer from "nodemailer";
+
+// Helpers
 import htmlMailTemplate from "./htmlMailTemplate.js";
 
 const mailTo = "berkay.ergun16@gmail.com"

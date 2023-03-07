@@ -1,6 +1,9 @@
+// Modules
 import jwt from "jsonwebtoken";
-import User from "../Models/User.js";
 import asyncHandler from "express-async-handler";
+
+// Models
+import User from "../Models/User.js";
 
 const checkUser = asyncHandler(async (req,res,next) => {
     const token = req.cookies.jwt
