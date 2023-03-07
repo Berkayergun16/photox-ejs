@@ -1,3 +1,4 @@
+// Modules
 import mongoose from "mongoose";
 
 const PhotoSchema = new mongoose.Schema({

@@ -22,7 +22,7 @@ const createPhoto = asyncHandler(async (req, res) => {
 
   const result = await cloudinary.uploader.upload(req.files.image.tempFilePath, {
     use_filename: true,
-    folder: 'lenslight'
+    folder: 'photox'
   })
 
   const { name, description } = req.body;
@@ -54,11 +54,17 @@ const createPhoto = asyncHandler(async (req, res) => {
 const getPhotoDetail = asyncHandler(async (req, res) => {
   const photo = await Photo.findById(req.params.id).populate('user');
 
+  let isOwner = false
+
+  if(res.locals.user) {
+    isOwner = photo.user.equals(res.locals.user._id);
+  }
+
   if(!photo) {
     res.status(404);
     throw new Error('Photo not found');
   }
-  res.render('photo', { photo });
+  res.render('photo', { photo, isOwner });
 });
 
 const updatePhoto = asyncHandler(async (req, res) => {
@@ -77,7 +83,7 @@ const updatePhoto = asyncHandler(async (req, res) => {
       await cloudinary.uploader.destroy(photo.image_id);
       const result = await cloudinary.uploader.upload(image.tempFilePath, {
         use_filename: true,
-        folder: 'lenslight'
+        folder: 'photox'
       })
       photo.url = result.secure_url;
       photo.image_id = result.public_id;

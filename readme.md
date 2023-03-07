@@ -21,6 +21,20 @@ NODE_MAIL_PASS=<YOUR_EMAIL_PASSWORD>
 
 
 ```
+## Used Technologies
+-Node.js
+-Express.js
+-MongoDB
+-Mongoose
+-JWT
+-Cloudinary
+-Express File Upload
+-Nodemailer
+-Bcrypt
+-Dotenv
+-Express Async Handler
+-Nodemon
+
 ## Install
 
 ```bash
